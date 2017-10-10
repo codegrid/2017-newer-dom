@@ -1,0 +1,248 @@
+<!doctype html>
+<meta charset=utf-8>
+<title>textContent/innerTextの簡単なテスト</title>
+<meta name=viewport content="width=device-width, initial-scale=1">
+<style>
+:root {
+	font-size: 10px;
+	font-family: sans-serif;
+}
+body {
+	font-size: 1.4rem;
+}
+h1 {
+	font-size: 2.6rem;
+}
+h2 {
+	font-size: 1.6rem;
+}
+section {
+	margin: 3rem 0;
+}
+</style>
+<style>
+#before-after::before {
+	content: "[BEFORE]";
+	display: inline;
+}
+#before-after::after {
+	content: "[AFTER]";
+	display: inline
+}
+</style>
+<script src="testharness.js"></script>
+<script src="testharnessreport.js"></script>
+<body>
+
+<h1>textContent/innerTextの簡単なテスト</h1>
+
+<section id="normal">
+<h2>ふつうのテキスト</h2>
+<div>見て分かる通り、短い文です。</div>
+</section>
+
+<section id="br">
+<h2>&lt;br>のあるテキスト</h2>
+<div>段落内に<code>&lt;br></code>があります。<br>この前に<code>&lt;br></code>があります。</div>
+</section>
+
+<section id="display-none">
+<h2>非表示なテキスト（display: none）</h2>
+<div>ここにふつうの文があります。<span style="display: none">ここには非表示な文があります。</span></div>
+</section>
+
+<section id="visibility-hidden">
+<h2>非表示なテキスト（visibility: hidden）</h2>
+<div>ここにふつうの文があります。<span style="visibility: hidden">ここには非表示な文があります。</span></div>
+</section>
+
+<section id="bold-italic">
+<h2>太字や斜体のあるテキスト</h2>
+<div>ここにふつうの文があります。<b>ここは太字で書かれた文です。</b><i>ここは斜体の文です。</i></div>
+</section>
+
+<section id="comments">
+<h2>コメントのあるテキスト</h2>
+<div><!-- コメントです。 -->この文の前にコメントがあります。</div>
+</section>
+
+<section id="text-transform">
+<h2>CSSで大文字、小文字にしているテキスト（text-transform）</h2>
+<div id="lower-to-upper"><span style="text-transform: uppercase">css</span></div>
+<div id="upper-to-lower"><span style="text-transform: lowercase">CSS</span></div>
+</section>
+
+<section id="small-caps">
+<h2>CSSでsmall-capsを指定したもの</h2>
+<div><span style="font-variant-caps: small-caps">Cascading Style Sheets</span></div>
+</section>
+
+<section id="element-not-rendered">
+<h2>非表示な要素</h2>
+<div style="display: none">ブラウザからは見えない文です。</div>
+</section>
+
+<section id="line-break-at-start">
+<h2>要素内容の最初が改行</h2>
+
+<div id="line-break-at-start-1">
+この文の先頭には改行があります。</div>
+
+<div id="line-break-at-start-2">
+
+この文の先頭には改行があります。</div>
+</section>
+
+<section id="line-break-at-end">
+<h2>要素内容の最後が改行</h2>
+
+<div id="line-break-at-end-1">この文の最後には改行があります。
+</div>
+
+<div id="line-break-at-end-2">この文の最後には改行があります。
+
+</div>
+</section>
+
+<section id="pseudo-elements">
+<h2>疑似要素</h2>
+<div id="before-after">疑似要素があります。</div>
+</section>
+
+<section id="element-type">
+<h2>要素型</h2>
+<div id="element-type-div-div">
+	<div>div</div>
+	<div>div</div>
+</div>
+<div id="element-type-p-p">
+	<p>p</p>
+	<p>p</p>
+</div>
+<div id="element-type-p-div-p">
+	<p>p</p>
+	<div>div</div>
+	<p>p</p>
+</div>
+<div id="element-type-h3-div">
+	<h3>h3</h3>
+	<div>div</div>
+</div>
+
+</section>
+
+<section id="tables">
+<h2>表</h2>
+<table border>
+<tr><th>th<th>th<th>th
+<tr><th>th<td>td<td>td
+</table>
+</section>
+
+<script>
+test(_ => {
+	var div = document.createElement('div')
+	assert_true('textContent' in div, '`textContent`がサポートされている')
+	assert_true('innerText' in div, '`innerText`がサポートされている')
+},'サポート')
+
+test(_ => {
+	var div = document.querySelector('#normal div')
+	assert_equals(div.textContent, div.innerText, 'ふつうの文では`textContent`も`innerText`も同じ')
+}, 'ふつうの文')
+
+test(_ => {
+	var div1 = document.querySelector('#line-break-at-start-1')
+	var div2 = document.querySelector('#line-break-at-start-2')
+	assert_equals(div1.textContent, '\nこの文の先頭には改行があります。', 'textContentではソース先頭の改行はそのまま')
+	assert_equals(div2.textContent, '\n\nこの文の先頭には改行があります。', 'textContentではソース先頭の改行はそのまま')
+	assert_equals(div1.innerText, 'この文の先頭には改行があります。', 'innerTextではソース先頭の改行はなくなる')
+	assert_equals(div2.innerText, 'この文の先頭には改行があります。', 'innerTextではソース先頭の改行はなくなる')
+}, '改行の扱い（要素先頭）')
+
+test(_ => {
+	var div1 = document.querySelector('#line-break-at-end-1')
+	var div2 = document.querySelector('#line-break-at-end-2')
+	assert_equals(div1.textContent, 'この文の最後には改行があります。\n', 'textContentではソース最後の改行はそのまま')
+	assert_equals(div2.textContent, 'この文の最後には改行があります。\n\n', 'textContentではソース最後の改行はそのまま')
+	assert_equals(div1.innerText, 'この文の最後には改行があります。', 'innerTextではソース最後の改行はなくなる')
+	assert_equals(div2.innerText, 'この文の最後には改行があります。', 'innerTextではソース最後の改行はなくなる')
+}, '改行の扱い（要素最後）')
+
+test(_ => {
+	var div = document.querySelector('#br div')
+	
+}, '`<br>`の扱い（要素内容の途中）')
+
+test(_ => {
+	var div = document.querySelector('#display-none div')
+	assert_not_equals(div.innerText, 'ここにふつうの文があります。ここには非表示な文があります。')
+	assert_equals(div.innerText, 'ここにふつうの文があります。')
+}, '`display: none`の扱い')
+
+test(_ => {
+	var div = document.querySelector('#visibility-hidden div')
+	assert_not_equals(div.innerText, 'ここにふつうの文があります。ここには非表示な文があります。')
+	assert_equals(div.innerText, 'ここにふつうの文があります。')
+}, '`visibility: hidden`の扱い')
+
+
+test(_ => {
+	var divLowerToUpper = document.querySelector('#lower-to-upper')
+	var divUpperToLower = document.querySelector('#upper-to-lower')
+	assert_equals(divLowerToUpper.textContent, 'css', 'textContentはtext-transform: uppercaseの影響を受けない')
+	assert_equals(divUpperToLower.textContent, 'CSS', 'textContentはtext-transform: lowercaseの影響を受けない')
+
+	assert_equals(divLowerToUpper.innerText, 'CSS', 'innerTextはtext-transform: uppercaseの表示を反映する')
+	assert_equals(divUpperToLower.innerText, 'css', 'innerTextはtext-transform: lowercaseの表示を反映する')
+}, 'text-transformの影響')
+
+test(_ => {
+	var div = document.querySelector('#small-caps div')
+	assert_true(CSS.supports('font-variant-caps', 'small-caps'), '`font-variant-caps: small-caps`がサポートされている')
+	assert_equals(div.textContent, 'Cascading Style Sheets', 'textContentはsmall-capsの影響を受けない')
+	assert_equals(div.innerText, 'Cascading Style Sheets', 'innerTextはsmall-capsの影響を受けない')
+	assert_not_equals(div.innerText, 'Cᴀꜱᴄᴀᴅɪɴɢ Sᴛʏʟᴇ Sʜᴇᴇᴛꜱ', 'innerTextはsmall-capsの影響を受けない')
+}, 'small-capsの場合')
+
+test(_ => {
+	var div = document.querySelector('#element-not-rendered div')
+	assert_equals(div.textContent, 'ブラウザからは見えない文です。', 'display: noneでもtextContentには関係ない')
+	assert_equals(div.innerText, 'ブラウザからは見えない文です。', 'display: noneの場合、"as rendered"なinnerTextでも文が返る')
+	assert_equals(div.textContent, div.innerText, '非表示な場合、textContentとinnerTextは同じ')
+}, '非表示な場合')
+
+test(_ => {
+	var beforeAfter = document.querySelector('#before-after')
+	assert_equals(beforeAfter.textContent, '疑似要素があります。', 'textContentは疑似要素を考慮しない。')
+	assert_equals(beforeAfter.innerText, '疑似要素があります。', 'innerTextは疑似要素を考慮しない。')
+}, '疑似要素の扱い')
+
+test(_ => {
+	var elementTypeDivDiv = document.querySelector('#element-type-div-div')
+	assert_equals(elementTypeDivDiv.innerText, 'div\ndiv', 'div + divはただの改行')
+}, '要素型ごとの処理：div')
+
+test(_ => {
+	var elementTypePP = document.querySelector('#element-type-p-p')
+	var elementTypePDivP = document.querySelector('#element-type-p-div-p')
+	assert_equals(elementTypePP.innerText, 'p\n\np', 'p + pでは間に空行が入る')
+	assert_equals(elementTypePDivP.innerText, 'p\n\ndiv\n\np', 'p + div + pではp-div間、div-p間に空行が入る')
+}, '要素型ごとの処理：p関連')
+
+test(_ => {
+	var elementTypeH3Div = document.querySelector('#element-type-h3-div')
+	assert_equals(elementTypeH3Div.innerText, 'h3\ndiv', 'h3 + divでは空行が入らない')
+}, '要素型ごとの処理：見出し')
+
+test(_ => {
+	var table = document.querySelector('#tables table')
+	assert_equals(table.innerText, 'th\tth\tth\nth\ttd\ttd', 'tr間に改行th/td間にタブ文字が入る')
+}, '表の扱い')
+
+// test(_ => {
+// 	var div = document.querySelector('#aaaaa div')
+	
+// })
+
+</script>
