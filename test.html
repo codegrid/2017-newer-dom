@@ -140,18 +140,18 @@ section {
 </section>
 
 <script>
-test(_ => {
+test(function () {
 	var div = document.createElement('div')
 	assert_true('textContent' in div, '`textContent`がサポートされている')
 	assert_true('innerText' in div, '`innerText`がサポートされている')
 },'サポート')
 
-test(_ => {
+test(function () {
 	var div = document.querySelector('#normal div')
 	assert_equals(div.textContent, div.innerText, 'ふつうの文では`textContent`も`innerText`も同じ')
 }, 'ふつうの文')
 
-test(_ => {
+test(function () {
 	var div1 = document.querySelector('#line-break-at-start-1')
 	var div2 = document.querySelector('#line-break-at-start-2')
 	assert_equals(div1.textContent, '\nこの文の先頭には改行があります。', 'textContentではソース先頭の改行はそのまま')
@@ -160,7 +160,7 @@ test(_ => {
 	assert_equals(div2.innerText, 'この文の先頭には改行があります。', 'innerTextではソース先頭の改行はなくなる')
 }, '改行の扱い（要素先頭）')
 
-test(_ => {
+test(function () {
 	var div1 = document.querySelector('#line-break-at-end-1')
 	var div2 = document.querySelector('#line-break-at-end-2')
 	assert_equals(div1.textContent, 'この文の最後には改行があります。\n', 'textContentではソース最後の改行はそのまま')
@@ -169,25 +169,25 @@ test(_ => {
 	assert_equals(div2.innerText, 'この文の最後には改行があります。', 'innerTextではソース最後の改行はなくなる')
 }, '改行の扱い（要素最後）')
 
-test(_ => {
+test(function () {
 	var div = document.querySelector('#br div')
 	
 }, '`<br>`の扱い（要素内容の途中）')
 
-test(_ => {
+test(function () {
 	var div = document.querySelector('#display-none div')
 	assert_not_equals(div.innerText, 'ここにふつうの文があります。ここには非表示な文があります。')
 	assert_equals(div.innerText, 'ここにふつうの文があります。')
 }, '`display: none`の扱い')
 
-test(_ => {
+test(function () {
 	var div = document.querySelector('#visibility-hidden div')
 	assert_not_equals(div.innerText, 'ここにふつうの文があります。ここには非表示な文があります。')
 	assert_equals(div.innerText, 'ここにふつうの文があります。')
 }, '`visibility: hidden`の扱い')
 
 
-test(_ => {
+test(function () {
 	var divLowerToUpper = document.querySelector('#lower-to-upper')
 	var divUpperToLower = document.querySelector('#upper-to-lower')
 	assert_equals(divLowerToUpper.textContent, 'css', 'textContentはtext-transform: uppercaseの影響を受けない')
@@ -197,7 +197,7 @@ test(_ => {
 	assert_equals(divUpperToLower.innerText, 'css', 'innerTextはtext-transform: lowercaseの表示を反映する')
 }, 'text-transformの影響')
 
-test(_ => {
+test(function () {
 	var div = document.querySelector('#small-caps div')
 	assert_true(CSS.supports('font-variant-caps', 'small-caps'), '`font-variant-caps: small-caps`がサポートされている')
 	assert_equals(div.textContent, 'Cascading Style Sheets', 'textContentはsmall-capsの影響を受けない')
@@ -205,42 +205,42 @@ test(_ => {
 	assert_not_equals(div.innerText, 'Cᴀꜱᴄᴀᴅɪɴɢ Sᴛʏʟᴇ Sʜᴇᴇᴛꜱ', 'innerTextはsmall-capsの影響を受けない')
 }, 'small-capsの場合')
 
-test(_ => {
+test(function () {
 	var div = document.querySelector('#element-not-rendered div')
 	assert_equals(div.textContent, 'ブラウザからは見えない文です。', 'display: noneでもtextContentには関係ない')
 	assert_equals(div.innerText, 'ブラウザからは見えない文です。', 'display: noneの場合、"as rendered"なinnerTextでも文が返る')
 	assert_equals(div.textContent, div.innerText, '非表示な場合、textContentとinnerTextは同じ')
 }, '非表示な場合')
 
-test(_ => {
+test(function () {
 	var beforeAfter = document.querySelector('#before-after')
 	assert_equals(beforeAfter.textContent, '疑似要素があります。', 'textContentは疑似要素を考慮しない。')
 	assert_equals(beforeAfter.innerText, '疑似要素があります。', 'innerTextは疑似要素を考慮しない。')
 }, '疑似要素の扱い')
 
-test(_ => {
+test(function () {
 	var elementTypeDivDiv = document.querySelector('#element-type-div-div')
 	assert_equals(elementTypeDivDiv.innerText, 'div\ndiv', 'div + divはただの改行')
 }, '要素型ごとの処理：div')
 
-test(_ => {
+test(function () {
 	var elementTypePP = document.querySelector('#element-type-p-p')
 	var elementTypePDivP = document.querySelector('#element-type-p-div-p')
 	assert_equals(elementTypePP.innerText, 'p\n\np', 'p + pでは間に空行が入る')
 	assert_equals(elementTypePDivP.innerText, 'p\n\ndiv\n\np', 'p + div + pではp-div間、div-p間に空行が入る')
 }, '要素型ごとの処理：p関連')
 
-test(_ => {
+test(function () {
 	var elementTypeH3Div = document.querySelector('#element-type-h3-div')
 	assert_equals(elementTypeH3Div.innerText, 'h3\ndiv', 'h3 + divでは空行が入らない')
 }, '要素型ごとの処理：見出し')
 
-test(_ => {
+test(function () {
 	var table = document.querySelector('#tables table')
 	assert_equals(table.innerText, 'th\tth\tth\nth\ttd\ttd', 'tr間に改行th/td間にタブ文字が入る')
 }, '表の扱い')
 
-// test(_ => {
+// test(function () {
 // 	var div = document.querySelector('#aaaaa div')
 	
 // })
