@@ -1,0 +1,14 @@
+{
+  "name": "2017-newer-dom",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "http-server"
+  },
+  "author": "Masataka Yakura",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^0.10.0"
+  }
+}
