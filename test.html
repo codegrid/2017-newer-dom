@@ -199,7 +199,7 @@ test(function () {
 
 test(function () {
 	var div = document.querySelector('#small-caps div')
-	assert_true(CSS.supports('font-variant-caps', 'small-caps'), '`font-variant-caps: small-caps`がサポートされている')
+	assert_true(!!CSS & CSS.supports('font-variant-caps', 'small-caps'), '`font-variant-caps: small-caps`がサポートされている')
 	assert_equals(div.textContent, 'Cascading Style Sheets', 'textContentはsmall-capsの影響を受けない')
 	assert_equals(div.innerText, 'Cascading Style Sheets', 'innerTextはsmall-capsの影響を受けない')
 	assert_not_equals(div.innerText, 'Cᴀꜱᴄᴀᴅɪɴɢ Sᴛʏʟᴇ Sʜᴇᴇᴛꜱ', 'innerTextはsmall-capsの影響を受けない')
